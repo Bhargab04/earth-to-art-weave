@@ -1,16 +1,17 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { gsap } from 'gsap';
 
 const AutoRotatingBrands = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<gsap.core.Timeline | null>(null);
 
-  const brands = [
+  const brands = useMemo(() => [
     'Hermes', 'Chanel', 'Tiffany & Co', 'Rolex', 'Louis Vuitton', 'Cartier', 
     'Bulgari', 'Prada', 'Gucci', 'Dior', 'Versace', 'Armani', 'Burberry',
     'Mont Blanc', 'Bottega Veneta', 'Saint Laurent', 'Fendi', 'Givenchy'
-  ];
+  ], []);
 
   useEffect(() => {
     if (!scrollRef.current) return;
@@ -18,19 +19,29 @@ const AutoRotatingBrands = () => {
     const scrollWidth = scrollRef.current.scrollWidth;
     const containerWidth = scrollRef.current.clientWidth;
 
-    // Create infinite scroll animation
-    const tl = gsap.timeline({ repeat: -1 });
-    
-    tl.to(scrollRef.current, {
-      x: -(scrollWidth - containerWidth),
-      duration: 30,
-      ease: "none"
-    });
+    // Only create animation if not already exists
+    if (!animationRef.current) {
+      animationRef.current = gsap.timeline({ 
+        repeat: -1,
+        paused: false
+      });
+      
+      animationRef.current.to(scrollRef.current, {
+        x: -(scrollWidth - containerWidth),
+        duration: 30,
+        ease: "none"
+      });
+    }
 
     return () => {
-      tl.kill();
+      if (animationRef.current) {
+        animationRef.current.kill();
+        animationRef.current = null;
+      }
     };
   }, []);
+
+  const duplicatedBrands = useMemo(() => [...brands, ...brands], [brands]);
 
   return (
     <div className="bg-charcoal py-16 overflow-hidden">
@@ -47,8 +58,8 @@ const AutoRotatingBrands = () => {
       </div>
 
       <div ref={containerRef} className="relative overflow-hidden">
-        <div ref={scrollRef} className="flex space-x-12 whitespace-nowrap">
-          {[...brands, ...brands].map((brand, index) => (
+        <div ref={scrollRef} className="flex space-x-12 whitespace-nowrap will-change-transform">
+          {duplicatedBrands.map((brand, index) => (
             <div
               key={`${brand}-${index}`}
               className="flex-shrink-0 group cursor-pointer"
@@ -66,4 +77,4 @@ const AutoRotatingBrands = () => {
   );
 };
 
-export default AutoRotatingBrands;
+export default React.memo(AutoRotatingBrands);
