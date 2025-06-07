@@ -5,9 +5,10 @@ import HeroSection from '@/components/HeroSection';
 import FromSoilToSurface from '@/components/FromSoilToSurface';
 import GlobalJourney from '@/components/GlobalJourney';
 import MaterialAlchemy from '@/components/MaterialAlchemy';
+import AutoRotatingBrands from '@/components/AutoRotatingBrands';
+import AutoRotatingCollections from '@/components/AutoRotatingCollections';
 import BrandCollaboration from '@/components/BrandCollaboration';
 import EcoMetrics from '@/components/EcoMetrics';
-import PaintCollections from '@/components/PaintCollections';
 import Testimonials from '@/components/Testimonials';
 import ContactCTA from '@/components/ContactCTA';
 import Footer from '@/components/Footer';
@@ -20,9 +21,10 @@ const Index = () => {
       <FromSoilToSurface />
       <GlobalJourney />
       <MaterialAlchemy />
+      <AutoRotatingBrands />
+      <AutoRotatingCollections />
       <BrandCollaboration />
       <EcoMetrics />
-      <PaintCollections />
       <Testimonials />
       <ContactCTA />
       <Footer />
