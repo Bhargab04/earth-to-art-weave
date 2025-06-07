@@ -1,25 +1,12 @@
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 const HeroSection = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const particles = useMemo(() => 
-    Array.from({ length: 8 }, (_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      delay: i * 0.5,
-      duration: 3 + Math.random() * 2
-    })), []
-  );
-
   useEffect(() => {
-    // Preload critical images
-    const img = new Image();
-    img.src = "https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?q=80&w=2000&auto=format&fit=crop";
-    img.onload = () => setIsLoaded(true);
+    setIsLoaded(true);
   }, []);
 
   return (
@@ -27,27 +14,24 @@ const HeroSection = () => {
       {/* Background texture overlay */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 to-transparent z-10" />
-        {isLoaded && (
-          <img 
-            src="https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?q=80&w=2000&auto=format&fit=crop"
-            alt="Natural textures"
-            className="w-full h-full object-cover"
-            loading="eager"
-          />
-        )}
+        <img 
+          src="https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?q=80&w=2000&auto=format&fit=crop"
+          alt="Natural textures"
+          className="w-full h-full object-cover"
+        />
       </div>
 
-      {/* Optimized animated particles */}
+      {/* Animated particles */}
       <div className="absolute inset-0 z-20">
-        {particles.map((particle) => (
+        {[...Array(8)].map((_, i) => (
           <div
-            key={particle.id}
-            className="absolute w-2 h-2 bg-gold/20 rounded-full animate-float will-change-transform"
+            key={i}
+            className="absolute w-2 h-2 bg-gold/20 rounded-full animate-float"
             style={{
-              left: `${particle.left}%`,
-              top: `${particle.top}%`,
-              animationDelay: `${particle.delay}s`,
-              animationDuration: `${particle.duration}s`
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${i * 0.5}s`,
+              animationDuration: `${3 + Math.random() * 2}s`
             }}
           />
         ))}
@@ -87,4 +71,4 @@ const HeroSection = () => {
   );
 };
 
-export default React.memo(HeroSection);
+export default HeroSection;
